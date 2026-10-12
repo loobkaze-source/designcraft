@@ -85,7 +85,7 @@ impl Backend for Remote {
                 self.conn = None;
                 self.roundtrip(&line).map_err(|e| {
                     self.conn = None;
-                    format!("DesignCraft app at {} is not reachable: {e}", self.addr)
+                    format!("Unigreen Design app at {} is not reachable: {e}", self.addr)
                 })?
             }
         };
@@ -102,6 +102,6 @@ impl Backend for Remote {
     }
 
     fn describe(&self) -> String {
-        format!("connected to the DesignCraft app at {}", self.addr)
+        format!("connected to the Unigreen Design app at {}", self.addr)
     }
 }

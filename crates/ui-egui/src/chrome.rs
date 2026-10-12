@@ -139,8 +139,8 @@ pub fn app_bar(app: &mut DesignApp, ui: &mut egui::Ui) {
             });
             // Centred title.
             let title = match app.session.active() {
-                Some(d) => format!("DesignCraft — {}", crate::rtl::isolate(&d.title())),
-                None => "DesignCraft".to_string(),
+                Some(d) => format!("Unigreen Design — {}", crate::rtl::isolate(&d.title())),
+                None => "Unigreen Design".to_string(),
             };
             // Centred between the menus and the right-hand controls; left out when it won't fit.
             let galley = crate::rtl::plain(ui.ctx(), &title, egui::FontId::proportional(11.5), t.text);
@@ -636,7 +636,7 @@ pub fn start_screen(app: &mut DesignApp, ui: &mut egui::Ui) {
         |ui| {
             ui.label(crate::rtl::widget(
                 ui,
-                egui::RichText::new(crate::i18n::tr(&app.ui.language, "Welcome to DesignCraft")).font(semibold(28.0)).color(t.text_strong),
+                egui::RichText::new(crate::i18n::tr(&app.ui.language, "Welcome to Unigreen Design")).font(semibold(28.0)).color(t.text_strong),
             ));
             ui.label(crate::rtl::widget(
                 ui,
@@ -650,7 +650,7 @@ pub fn start_screen(app: &mut DesignApp, ui: &mut egui::Ui) {
                     .add(
                         egui::Button::new(crate::rtl::widget(
                             ui,
-                            egui::RichText::new(crate::i18n::tr(&app.ui.language, "  New file  ")).size(14.0).color(Color32::WHITE),
+                            egui::RichText::new(crate::i18n::tr(&app.ui.language, "  New file  ")).size(14.0).color(Tokens::text_on(t.accent_strong)),
                         ))
                         .fill(t.accent_strong)
                         .corner_radius(16.0)
@@ -725,7 +725,7 @@ fn community_card(app: &mut DesignApp, ui: &mut egui::Ui) {
         ui.set_max_width(640.0);
         ui.horizontal(|ui| {
             let (r, _) = ui.allocate_exact_size(vec2(44.0, 44.0), Sense::hover());
-            crate::about::paint_mark(ui, r, crate::about::BRAND);
+            crate::about::paint_mark(ui, r);
             ui.add_space(8.0);
             ui.vertical(|ui| {
                 ui.label(crate::rtl::widget(

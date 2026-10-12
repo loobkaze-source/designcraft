@@ -7,9 +7,9 @@
   <key>CFBundleDevelopmentRegion</key>
   <string>en</string>
   <key>CFBundleDisplayName</key>
-  <string>DesignCraft</string>
+  <string>Unigreen Design</string>
   <key>CFBundleName</key>
-  <string>DesignCraft</string>
+  <string>Unigreen Design</string>
   <key>CFBundleExecutable</key>
   <string>DesignCraft</string>
   <key>CFBundleIdentifier</key>
@@ -43,7 +43,7 @@
   <key>NSRequiresAquaSystemAppearance</key>
   <false/>
   <key>NSHumanReadableCopyright</key>
-  <string>Copyright © the DesignCraft authors. MIT OR Apache-2.0.</string>
+  <string>Copyright (c) the DesignCraft authors and Unigreen Power Co., Ltd. MIT OR Apache-2.0.</string>
 
   <!-- Designcraft's own format. -->
   <key>UTExportedTypeDeclarations</key>
@@ -52,7 +52,7 @@
       <key>UTTypeIdentifier</key>
       <string>ai.storyteller.designcraft.document</string>
       <key>UTTypeDescription</key>
-      <string>DesignCraft Document</string>
+      <string>Unigreen Design Document</string>
       <key>UTTypeConformsTo</key>
       <array>
         <string>public.data</string>

@@ -21,9 +21,9 @@ pub const VERSION: u32 = 1;
 
 #[derive(Debug, thiserror::Error)]
 pub enum FormatError {
-    #[error("not a DesignCraft document: {0}")]
+    #[error("not a Unigreen Design document: {0}")]
     NotOurs(String),
-    #[error("document is from a newer DesignCraft (format {0}); please update")]
+    #[error("document is from a newer Unigreen Design (format {0}); please update")]
     TooNew(u32),
     #[error("{0}")]
     Io(String),

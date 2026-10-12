@@ -52,9 +52,9 @@ enum PageDrag {
 }
 
 /// Selected-page tint (multiplied over the thumbnail).
-const SELECTED_TINT: Color32 = Color32::from_rgb(0x88, 0xc7, 0xfb);
+const SELECTED_TINT: Color32 = Color32::from_rgb(136, 251, 209);
 /// Page-number badge of the selected page.
-const BADGE: Color32 = Color32::from_rgb(0x2f, 0x73, 0xe0);
+const BADGE: Color32 = Color32::from_rgb(26, 140, 100);
 /// Thumbnail height (InDesign: about 28×37 pt for Letter).
 const THUMB_H: f32 = 37.0;
 /// Parent rows.

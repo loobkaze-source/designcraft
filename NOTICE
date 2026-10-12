@@ -63,3 +63,7 @@ Rust dependencies (vello_cpu, kurbo, skrifa, harfrust, image, egui, eframe, …)
 licensed (MIT/Apache-2.0/BSD/ISC/Zlib) and fetched through crates.io.
 
 No Adobe icons, images or artwork are included.
+
+Unigreen Design is a modified version of DesignCraft distributed by Unigreen Power Co., Ltd.
+Modifications: product name, app icons, colour theme and packaging metadata. The Unigreen name and
+logo are trademarks of Unigreen Power Co., Ltd. and are not licensed under MIT or Apache-2.0.

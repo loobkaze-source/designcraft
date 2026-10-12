@@ -10,18 +10,18 @@
 -->
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <Package
-      Name="DesignCraft"
-      Manufacturer="Learning Machines LLC"
+      Name="Unigreen Design"
+      Manufacturer="Unigreen Power Co., Ltd."
       Version="$(var.Version)"
       UpgradeCode="49E87D30-BB68-4896-AA1D-F45C833CFC3C"
       Scope="perMachine"
       Compressed="yes"
       Language="1033">
-    <SummaryInformation Description="DesignCraft page layout and publishing" Manufacturer="Learning Machines LLC" />
+    <SummaryInformation Description="Unigreen Design page layout and publishing" Manufacturer="Unigreen Power Co., Ltd." />
     <!-- Same-version upgrades let successive pre-releases of one X.Y.Z replace each other
          (MSI versions are numeric, so 1.2.3-rc.1 and 1.2.3-rc.2 are both 1.2.3). -->
     <MajorUpgrade AllowSameVersionUpgrades="yes"
-        DowngradeErrorMessage="A newer version of DesignCraft is already installed." />
+        DowngradeErrorMessage="A newer version of Unigreen Design is already installed." />
     <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
 
     <Icon Id="DesigncraftIcon.ico" SourceFile="$(var.IconPath)" />
@@ -31,11 +31,11 @@
     <Property Id="ARPHELPLINK" Value="https://discord.gg/artcraft" />
 
     <StandardDirectory Id="ProgramFiles6432Folder">
-      <Directory Id="INSTALLFOLDER" Name="DesignCraft" />
+      <Directory Id="INSTALLFOLDER" Name="Unigreen Design" />
     </StandardDirectory>
     <StandardDirectory Id="ProgramMenuFolder" />
 
-    <Feature Id="Main" Title="DesignCraft" Level="1">
+    <Feature Id="Main" Title="Unigreen Design" Level="1">
       <ComponentGroupRef Id="DesigncraftFiles" />
     </Feature>
   </Package>
@@ -44,8 +44,8 @@
     <ComponentGroup Id="DesigncraftFiles" Directory="INSTALLFOLDER">
       <Component Id="DesigncraftApp" Guid="DE018EF3-EE87-4E36-9F76-0B7B060A195E">
         <File Id="DesigncraftExe" Source="$(var.BinDir)\designcraft.exe" KeyPath="yes">
-          <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder" Name="DesignCraft"
-              Description="DesignCraft page layout and publishing" WorkingDirectory="INSTALLFOLDER" Advertise="yes"
+          <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder" Name="Unigreen Design"
+              Description="Unigreen Design page layout and publishing" WorkingDirectory="INSTALLFOLDER" Advertise="yes"
               Icon="DesigncraftIcon.ico" IconIndex="0" />
         </File>
 

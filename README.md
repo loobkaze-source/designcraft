@@ -1,12 +1,12 @@
-<p align="center">
-  <a href="https://getartcraft.com/">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="docs/brand/artcraft-logo-white.svg">
-      <img alt="ArtCraft" src="docs/brand/artcraft-logo.svg" width="200">
-    </picture>
-  </a>
-</p>
+# Unigreen Design
 
+Unigreen Design is Unigreen Power's distribution of [DesignCraft](https://github.com/storytold/designcraft),
+an open-source page layout and publishing app: a clean-room reimplementation of Adobe InDesign, rebuilt in pure Rust.
+Based on DesignCraft by the ArtCraft team.
+
+> **Upstream:** everything below this point is upstream DesignCraft's README, kept unchanged.
+
+---
 
 <h1 align="center">DesignCraft</h1>
 
@@ -298,6 +298,5 @@ Forks and modified versions must remove them.
 <br>
 
 <p align="center">
-  <a href="https://getartcraft.com/"><img alt="ArtCraft" src="docs/brand/artcraft-mark.svg" width="28"></a><br>
   <sub>Made by the <a href="https://getartcraft.com/">ArtCraft</a> team and community.</sub>
 </p>

@@ -1,5 +1,5 @@
 //! Help › About DesignCraft: tabs About · Contributors · Models. About is the splash with the
-//! ArtCraft mark, version, and community links (Discord first and largest), plus the other ArtCraft
+//! Unigreen mark, version, and community links (Discord first and largest), plus the other ArtCraft
 //! apps; Contributors and Models are the compiled-in credits (`crate::credits`).
 
 use designcraft_engine::links;
@@ -9,13 +9,27 @@ use serde_json::json;
 use crate::DesignApp;
 use crate::theme::{Tokens, semibold};
 
-/// ArtCraft brand blue (from `docs/brand/artcraft-mark.svg`).
-pub const BRAND: Color32 = Color32::from_rgb(0x4e, 0x7b, 0xfb);
+/// Unigreen mint, the app's brand colour.
+pub const BRAND: Color32 = Color32::from_rgb(52, 211, 153);
 /// Discord's brand colour, used for the "Join our Discord" buttons (colour only; no Discord artwork).
 pub const DISCORD: Color32 = Color32::from_rgb(0x58, 0x65, 0xf2);
 
-/// The ArtCraft mark outline (viewBox -10 -19.42 136.34 136.34), from `docs/brand/artcraft-mark.svg`.
-const MARK_PATH: &str = "M104.28,49.49L81.55,0h-31.23l-3.17,4.76L14.75,53.63,0,75.85l21.55,21.55,63.79-36.94,16.99,37.04,14.01-21.74-12.06-26.27ZM32.89,65.66l32.42-48.87,10.91,23.77-43.32,25.09Z";
+/// The Unigreen three-leaf mark (viewBox 0 0 100 98), from `assets/brand/unigreen-mark.svg`:
+/// each leaf's outline and its colour.
+const MARK_LEAVES: [(&str, [u8; 3]); 3] = [
+    (
+        "M99.609375,48.449219C99.609375,75.710938,77.578125,97.8125,50.351562,97.929688C50.210938,96.386719,50.128906,94.808594,50.128906,93.21875C50.128906,89.765625,50.492188,86.40625,51.175781,83.167969C54.863281,65.765625,67.917969,51.816406,84.824219,46.859375C89.136719,45.597656,93.707031,44.914062,98.433594,44.914062C98.785156,44.914062,99.136719,44.914062,99.492188,44.925781C99.5625,46.09375,99.609375,47.257812,99.609375,48.449219Z",
+        [126, 208, 145],
+    ),
+    (
+        "M46.59375,93.21875C46.59375,94.761719,46.523438,96.28125,46.382812,97.789062C20.792969,95.878906,0.644531,74.519531,0.644531,48.449219C0.644531,47.28125,0.679688,46.117188,0.761719,44.972656C5.890625,45.230469,10.8125,46.292969,15.398438,48.035156C30.488281,53.75,41.976562,66.828125,45.484375,82.875C46.203125,86.207031,46.59375,89.671875,46.59375,93.21875Z",
+        [93, 203, 245],
+    ),
+    (
+        "M64.265625,27.242188C64.265625,38.375,58.953125,48.257812,50.71875,54.480469C42.480469,48.257812,37.167969,38.375,37.167969,27.242188C37.167969,16.109375,42.480469,6.222656,50.71875,0.00390625C58.953125,6.222656,64.265625,16.109375,64.265625,27.242188Z",
+        [136, 90, 179],
+    ),
+];
 
 /// The other ArtCraft apps (app-page slug, name, what it is) — same list as the README.
 pub const SIBLINGS: &[(&str, &str, &str)] = &[
@@ -30,29 +44,31 @@ pub const SIBLINGS: &[(&str, &str, &str)] = &[
 /// The About window's tabs, in `UiState::about_tab` order (`help.about {tab}` names them in lowercase).
 pub const ABOUT_TABS: [&str; 3] = ["About", "Contributors", "Models"];
 
-/// Paint the ArtCraft mark into `rect` (square), rasterised once per size and cached.
-pub fn paint_mark(ui: &egui::Ui, rect: Rect, color: Color32) {
+/// Paint the Unigreen mark into `rect` (square, aspect ratio kept), rasterised once per size and cached.
+pub fn paint_mark(ui: &egui::Ui, rect: Rect) {
     use designcraft_render::vello_cpu::{self, kurbo, peniko};
     let ctx = ui.ctx();
     let ppp = ctx.pixels_per_point();
     let px = ((rect.width().min(rect.height()) * ppp).round() as u32).clamp(8, 1024);
-    let key = egui::Id::new(("artcraft_mark", px, color.to_array()));
+    let key = egui::Id::new(("unigreen_mark", px));
     let tex: Option<egui::TextureHandle> = ctx.data(|d| d.get_temp(key));
     let tex = tex.unwrap_or_else(|| {
         let mut rc = vello_cpu::RenderContext::new_with(px as u16, px as u16, vello_cpu::RenderSettings { num_threads: 0, ..Default::default() });
-        let k = px as f64 / 136.34;
-        rc.set_transform(kurbo::Affine::scale(k) * kurbo::Affine::translate((10.0, 19.42)));
-        let [r, g, b, a] = color.to_srgba_unmultiplied();
-        rc.set_paint(peniko::Color::from_rgba8(r, g, b, a));
-        if let Ok(p) = kurbo::BezPath::from_svg(MARK_PATH) {
-            rc.fill_path(&p);
+        // 100 x 98 units, centred vertically in the square.
+        let k = px as f64 / 100.0;
+        rc.set_transform(kurbo::Affine::scale(k) * kurbo::Affine::translate((0.0, 1.0)));
+        for (path, [r, g, b]) in MARK_LEAVES {
+            rc.set_paint(peniko::Color::from_rgba8(r, g, b, 255));
+            if let Ok(p) = kurbo::BezPath::from_svg(path) {
+                rc.fill_path(&p);
+            }
         }
         rc.flush();
         let mut pm = vello_cpu::Pixmap::new(px as u16, px as u16);
         let mut res = vello_cpu::Resources::new();
         rc.render(&mut pm, &mut res);
         let ci = egui::ColorImage::from_rgba_premultiplied([px as usize, px as usize], pm.data_as_u8_slice());
-        let t = ctx.load_texture("artcraft_mark", ci, egui::TextureOptions::LINEAR);
+        let t = ctx.load_texture("unigreen_mark", ci, egui::TextureOptions::LINEAR);
         ctx.data_mut(|d| d.insert_temp(key, t.clone()));
         t
     });
@@ -138,11 +154,11 @@ pub fn show(app: &mut DesignApp, ctx: &egui::Context) {
         ui.vertical_centered(|ui| {
             ui.add_space(8.0);
             let (r, _) = ui.allocate_exact_size(vec2(72.0, 72.0), Sense::hover());
-            paint_mark(ui, r, BRAND);
+            paint_mark(ui, r);
             ui.add_space(6.0);
             ui.label(crate::rtl::widget(
                 ui,
-                egui::RichText::new(crate::i18n::tr(&app.ui.language, "DesignCraft")).font(semibold(26.0)).color(t.text_strong),
+                egui::RichText::new(crate::i18n::tr(&app.ui.language, "Unigreen Design")).font(semibold(26.0)).color(t.text_strong),
             ));
             crate::rtl::label(
                 ui,
@@ -159,7 +175,7 @@ pub fn show(app: &mut DesignApp, ctx: &egui::Context) {
             ));
             ui.label(crate::rtl::widget(
                 ui,
-                egui::RichText::new(crate::i18n::tr(&app.ui.language, "Part of the ArtCraft suite of open creative tools."))
+                egui::RichText::new(crate::i18n::tr(&app.ui.language, "Unigreen Design, based on DesignCraft by the ArtCraft team and community."))
                     .size(12.0)
                     .color(t.text_dim),
             ));
@@ -193,7 +209,7 @@ pub fn show(app: &mut DesignApp, ctx: &egui::Context) {
             ui.add_space(6.0);
             ui.label(crate::rtl::widget(
                 ui,
-                egui::RichText::new(crate::i18n::tr(&app.ui.language, "More ArtCraft apps")).font(semibold(12.0)).color(t.text_strong),
+                egui::RichText::new(crate::i18n::tr(&app.ui.language, "ArtCraft apps")).font(semibold(12.0)).color(t.text_strong),
             ));
             ui.add_space(4.0);
             ui.horizontal(|ui| {

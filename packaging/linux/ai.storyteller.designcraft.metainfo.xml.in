@@ -5,14 +5,14 @@
   <id>ai.storyteller.designcraft</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT OR Apache-2.0</project_license>
-  <name>DesignCraft</name>
+  <name>Unigreen Design</name>
   <summary>Lay out magazines, books and print documents</summary>
   <developer id="ai.storyteller">
-    <name>Learning Machines LLC</name>
+    <name>Unigreen Power Co., Ltd.</name>
   </developer>
   <description>
     <p>
-      DesignCraft is a page layout. Lay out magazines, books and print documents
+      Unigreen Design is a page layout. Lay out magazines, books and print documents
     </p>
   </description>
   <launchable type="desktop-id">ai.storyteller.designcraft.desktop</launchable>

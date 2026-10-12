@@ -158,17 +158,16 @@ pub const UI_COMMANDS: &[(&str, &str, Option<&str>, &str)] = &[
         "{on?: bool, at?: [x, y] (points from the canvas's top-left)} — the Contextual Task Bar stays where it is (or at `at`) instead of following the selection; with neither, toggles",
     ),
     ("window.taskBarReset", "Reset Bar Position", None, "{} — the Contextual Task Bar follows the selection again, under it"),
-    ("help.discord", "Join the ArtCraft Discord…", None, "{} — opens https://discord.gg/artcraft in the browser"),
-    ("help.appPage", "DesignCraft Website…", None, "{} — opens https://getartcraft.com/apps/designcraft"),
-    ("help.github", "DesignCraft on GitHub…", None, "{} — opens https://github.com/storytold/designcraft"),
+    ("help.discord", "Contact Unigreen on LINE…", None, "{} — opens https://line.me/R/ti/p/@unigreen.power (LINE @unigreen.power) in the browser"),
+    ("help.appPage", "Unigreen Design Website…", None, "{} — opens https://unigreenpower.co.th"),
+    ("help.github", "Unigreen Design on GitHub…", None, "{} — opens https://github.com/loobkaze-source/designcraft"),
     ("help.issues", "Report an Issue…", None, "{} — opens the GitHub issue tracker"),
-    ("help.website", "ArtCraft Website…", None, "{} — opens https://getartcraft.com"),
-    ("help.app", "ArtCraft App Page…", None, "{app} — opens https://getartcraft.com/apps/{app} (e.g. photocraft)"),
+    ("help.website", "Unigreen Website…", None, "{} — opens https://unigreenpower.co.th"),
     (
         "help.about",
         "About Unigreen Design",
         None,
-        "{open?: true, tab?: \"about\"|\"contributors\"|\"models\"} — the About window: splash with community links, contributor and model credits (open: false closes it)",
+        "{open?: true, tab?: \"about\"|\"contributors\"|\"models\"} — the About window: splash with contact and project links, contributor and model credits (open: false closes it)",
     ),
     ("window.toolsDoubleColumn", "Tools: Double Column", None, "{}"),
     (
@@ -708,7 +707,6 @@ pub const MENUS: &[(&str, &[&str])] = &[
             "ui:help.appPage",
             "ui:help.github",
             "ui:help.issues",
-            "ui:help.website",
             "-",
             "cmd:file.newSample",
             "-",
@@ -1368,14 +1366,6 @@ pub fn run_ui(app: &mut DesignApp, id: &str, p: &Value) -> Option<Result<Value, 
             app.ui.about = p.get("open").and_then(Value::as_bool).unwrap_or(true);
             Ok(json!(app.ui.about))
         }
-        "help.app" => match p.get("app").and_then(Value::as_str) {
-            Some(slug) if !slug.is_empty() && slug.chars().all(|c| c.is_ascii_alphanumeric() || c == '-') => {
-                let url = format!("{}/apps/{slug}", designcraft_engine::links::WEBSITE);
-                app.ui.pending_urls.push(url.clone());
-                Ok(json!({"url": url}))
-            }
-            _ => Err("help.app: give `app` (e.g. \"photocraft\")".into()),
-        },
         h if h.starts_with("help.") && designcraft_engine::links::get(&h[5..]).is_some() => {
             let url = designcraft_engine::links::get(&h[5..]).unwrap_or_default().to_string();
             app.ui.pending_urls.push(url.clone());

@@ -1,6 +1,6 @@
 //! Help › About DesignCraft: tabs About · Contributors · Models. About is the splash with the
-//! Unigreen mark, version, and community links (Discord first and largest), plus the other ArtCraft
-//! apps; Contributors and Models are the compiled-in credits (`crate::credits`).
+//! Unigreen mark, version, and contact and project links (LINE first and largest); Contributors and
+//! Models are the compiled-in credits (`crate::credits`).
 
 use designcraft_engine::links;
 use egui::{Color32, Rect, Sense, Stroke, pos2, vec2};
@@ -11,8 +11,8 @@ use crate::theme::{Tokens, semibold};
 
 /// Unigreen mint, the app's brand colour.
 pub const BRAND: Color32 = Color32::from_rgb(52, 211, 153);
-/// Discord's brand colour, used for the "Join our Discord" buttons (colour only; no Discord artwork).
-pub const DISCORD: Color32 = Color32::from_rgb(0x58, 0x65, 0xf2);
+/// A deep Unigreen green for the "Contact Unigreen on LINE" buttons (white label; no LINE artwork).
+pub const CONTACT: Color32 = Color32::from_rgb(0x05, 0x96, 0x69);
 
 /// The Unigreen three-leaf mark (viewBox 0 0 100 98), from `assets/brand/unigreen-mark.svg`:
 /// each leaf's outline and its colour.
@@ -29,16 +29,6 @@ const MARK_LEAVES: [(&str, [u8; 3]); 3] = [
         "M64.265625,27.242188C64.265625,38.375,58.953125,48.257812,50.71875,54.480469C42.480469,48.257812,37.167969,38.375,37.167969,27.242188C37.167969,16.109375,42.480469,6.222656,50.71875,0.00390625C58.953125,6.222656,64.265625,16.109375,64.265625,27.242188Z",
         [136, 90, 179],
     ),
-];
-
-/// The other ArtCraft apps (app-page slug, name, what it is) — same list as the README.
-pub const SIBLINGS: &[(&str, &str, &str)] = &[
-    ("photocraft", "PhotoCraft", "image editing"),
-    ("vectorcraft", "VectorCraft", "vector illustration"),
-    ("filmcraft", "FilmCraft", "video editing, color and sound"),
-    ("lightcraft", "LightCraft", "photo library and raw development"),
-    ("pdfcraft", "PdfCraft", "reading, organizing and protecting PDFs"),
-    ("effectcraft", "EffectCraft", "motion graphics and visual effects"),
 ];
 
 /// The About window's tabs, in `UiState::about_tab` order (`help.about {tab}` names them in lowercase).
@@ -77,7 +67,7 @@ pub fn paint_mark(ui: &egui::Ui, rect: Rect) {
     ui.painter().image(tex.id(), r, Rect::from_min_max(pos2(0.0, 0.0), pos2(1.0, 1.0)), Color32::WHITE);
 }
 
-/// A speech-bubble glyph (drawn in code) for Discord buttons.
+/// A neutral speech-bubble glyph (drawn in code) for the contact buttons.
 pub fn paint_chat_icon(p: &egui::Painter, c: egui::Pos2, s: f32, color: Color32) {
     let body = Rect::from_center_size(c - vec2(0.0, s * 0.06), vec2(s, s * 0.72));
     p.rect_filled(body, s * 0.24, color);
@@ -88,21 +78,27 @@ pub fn paint_chat_icon(p: &egui::Painter, c: egui::Pos2, s: f32, color: Color32)
     ];
     p.add(egui::Shape::convex_polygon(tail, color, Stroke::NONE));
     let eye = s * 0.09;
-    let bg = if color.r() as u32 + color.g() as u32 + color.b() as u32 > 380 { DISCORD } else { Color32::WHITE };
+    let bg = if color.r() as u32 + color.g() as u32 + color.b() as u32 > 380 { CONTACT } else { Color32::WHITE };
     p.circle_filled(body.center() - vec2(s * 0.18, 0.0), eye, bg);
     p.circle_filled(body.center() + vec2(s * 0.18, 0.0), eye, bg);
 }
 
-/// The big "Join our Discord" button. Returns true when clicked.
-pub fn discord_button(ui: &mut egui::Ui, label: &str, size: egui::Vec2) -> bool {
-    let (r, resp) = ui.allocate_exact_size(size, Sense::click());
-    let resp = resp.on_hover_text(links::DISCORD).on_hover_cursor(egui::CursorIcon::PointingHand);
-    let fill = if resp.hovered() { Color32::from_rgb(0x47, 0x52, 0xc4) } else { DISCORD };
-    ui.painter().rect_filled(r, size.y / 2.0, fill);
+/// "Contact Unigreen on LINE (@unigreen.power)" in the interface language: the contact buttons' tooltip.
+pub fn contact_tooltip(lang: &str) -> String {
+    format!("{} ({})", crate::i18n::tr(lang, "Contact Unigreen on LINE"), links::LINE_ID)
+}
+
+/// The big "Contact Unigreen on LINE" button (at least `size`, wider for a longer label). Returns
+/// true when clicked.
+pub fn contact_button(ui: &mut egui::Ui, label: &str, tooltip: &str, size: egui::Vec2) -> bool {
     let icon = size.y * 0.5;
     let font = semibold((size.y * 0.42).max(11.0));
     let galley = crate::rtl::plain(ui.ctx(), label, font, Color32::WHITE);
     let total = icon + 8.0 + galley.size().x;
+    let (r, resp) = ui.allocate_exact_size(vec2(size.x.max(total + size.y), size.y), Sense::click());
+    let resp = resp.on_hover_text(tooltip).on_hover_cursor(egui::CursorIcon::PointingHand);
+    let fill = if resp.hovered() { Color32::from_rgb(0x04, 0x78, 0x57) } else { CONTACT };
+    ui.painter().rect_filled(r, size.y / 2.0, fill);
     let x0 = r.center().x - total / 2.0;
     paint_chat_icon(ui.painter(), pos2(x0 + icon / 2.0, r.center().y), icon, Color32::WHITE);
     ui.painter().galley(pos2(x0 + icon + 8.0, r.center().y - galley.size().y / 2.0), galley, Color32::WHITE);
@@ -180,24 +176,23 @@ pub fn show(app: &mut DesignApp, ctx: &egui::Context) {
                     .color(t.text_dim),
             ));
             ui.add_space(16.0);
-            if discord_button(ui, "Join the ArtCraft Discord", vec2(300.0, 40.0)) {
+            let lang = app.ui.language.clone();
+            if contact_button(ui, crate::i18n::tr(&lang, "Contact Unigreen on LINE"), &contact_tooltip(&lang), vec2(300.0, 40.0)) {
                 open = Some("discord");
             }
             ui.add_space(4.0);
             ui.label(crate::rtl::widget(
                 ui,
-                egui::RichText::new(crate::i18n::tr(&app.ui.language, "discord.gg/artcraft — help, feedback and show-and-tell"))
+                egui::RichText::new(crate::i18n::tr(&app.ui.language, "LINE @unigreen.power — help and feedback"))
                     .size(11.0)
                     .color(t.text_dim),
             ));
             ui.add_space(14.0);
             ui.horizontal(|ui| {
                 // Centre the row of links.
-                let w = 330.0;
+                let w = 280.0;
                 ui.add_space(((ui.available_width() - w) / 2.0).max(0.0));
-                for (text, key) in
-                    [("DesignCraft page", "appPage"), ("GitHub", "github"), ("getartcraft.com", "website"), ("Report an issue", "issues")]
-                {
+                for (text, key) in [("unigreenpower.co.th", "website"), ("GitHub", "github"), ("Report an issue", "issues")] {
                     if link(ui, text, links::get(key).unwrap_or_default(), t.accent) {
                         open = Some(key);
                     }
@@ -205,31 +200,6 @@ pub fn show(app: &mut DesignApp, ctx: &egui::Context) {
                 }
             });
             ui.add_space(16.0);
-            ui.separator();
-            ui.add_space(6.0);
-            ui.label(crate::rtl::widget(
-                ui,
-                egui::RichText::new(crate::i18n::tr(&app.ui.language, "ArtCraft apps")).font(semibold(12.0)).color(t.text_strong),
-            ));
-            ui.add_space(4.0);
-            ui.horizontal(|ui| {
-                let pad = ui.spacing().button_padding.x * 2.0 + ui.spacing().item_spacing.x;
-                let w: f32 = SIBLINGS
-                    .iter()
-                    .map(|(_, n, _)| ui.painter().layout_no_wrap(n.to_string(), egui::FontId::proportional(12.0), Color32::WHITE).size().x + pad)
-                    .sum::<f32>()
-                    - ui.spacing().item_spacing.x;
-                ui.add_space(((ui.available_width() - w) / 2.0).max(0.0));
-                for (slug, name, what) in SIBLINGS {
-                    let url = format!("{}/apps/{slug}", links::WEBSITE);
-                    let b =
-                        ui.add(egui::Button::new(egui::RichText::new(*name).size(12.0)).corner_radius(10.0)).on_hover_text(format!("{what} — {url}"));
-                    if b.clicked() {
-                        app.ui.pending_urls.push(url);
-                    }
-                }
-            });
-            ui.add_space(12.0);
             ui.label(crate::rtl::widget(
                 ui,
                 egui::RichText::new(crate::i18n::tr(&app.ui.language, "Open source. No telemetry.")).size(11.0).color(t.text_dim),

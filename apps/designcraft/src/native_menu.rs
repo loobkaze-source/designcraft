@@ -37,12 +37,12 @@ impl NativeMenu {
         let mut counter = 0usize;
         // Application menu.
         let app_menu = Submenu::new("Unigreen Design", true);
-        // Our own About splash (with the community links) instead of the stock panel.
+        // Our own About splash (with the contact and project links) instead of the stock panel.
         let about = MenuItem::with_id("dc-about", "About Unigreen Design", true, None);
-        let discord = MenuItem::with_id("dc-discord", "Join the ArtCraft Discord…", true, None);
+        let contact = MenuItem::with_id("dc-discord", designcraft_ui_egui::i18n::tr(&app.ui.language, "Contact Unigreen on LINE…"), true, None);
         let _ = app_menu.append_items(&[
             &about,
-            &discord,
+            &contact,
             &PredefinedMenuItem::separator(),
             &PredefinedMenuItem::services(None),
             &PredefinedMenuItem::separator(),
@@ -53,7 +53,7 @@ impl NativeMenu {
             &PredefinedMenuItem::quit(None),
         ]);
         items.insert("dc-about".into(), ("help.about".into(), serde_json::Value::Null, Handle::Plain(about)));
-        items.insert("dc-discord".into(), ("help.discord".into(), serde_json::Value::Null, Handle::Plain(discord)));
+        items.insert("dc-discord".into(), ("help.discord".into(), serde_json::Value::Null, Handle::Plain(contact)));
         let _ = menu.append(&app_menu);
         for (title, entries) in menus::menu_tree() {
             let sub = Submenu::new(designcraft_ui_egui::i18n::tr(&app.ui.language, title), true);

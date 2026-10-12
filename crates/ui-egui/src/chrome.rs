@@ -124,8 +124,8 @@ pub fn app_bar(app: &mut DesignApp, ui: &mut egui::Ui) {
                             app.status("Export a PDF, IDML or package to share — no cloud account needed.");
                         }
                         ui.add_space(8.0);
-                        // Always one click away: the ArtCraft community Discord.
-                        if crate::about::discord_button(ui, "Discord", vec2(78.0, 22.0)) {
+                        // Always one click away: contact Unigreen on LINE.
+                        if crate::about::contact_button(ui, "LINE", &crate::about::contact_tooltip(&app.ui.language), vec2(64.0, 22.0)) {
                             let _ = app.run("help.discord", json!({}));
                         }
                         tools_start = ui.min_rect().min.x;
@@ -718,7 +718,7 @@ pub fn start_screen(app: &mut DesignApp, ui: &mut egui::Ui) {
     let _ = Content::Unassigned;
 }
 
-/// Start screen: the ArtCraft community (Discord first) and project links.
+/// Start screen: contact Unigreen (LINE first) and the project links.
 fn community_card(app: &mut DesignApp, ui: &mut egui::Ui) {
     let t = Tokens::get(ui.ctx());
     egui::Frame::NONE.fill(t.panel).corner_radius(10.0).inner_margin(egui::Margin::same(14)).show(ui, |ui| {
@@ -730,7 +730,7 @@ fn community_card(app: &mut DesignApp, ui: &mut egui::Ui) {
             ui.vertical(|ui| {
                 ui.label(crate::rtl::widget(
                     ui,
-                    egui::RichText::new(crate::i18n::tr(&app.ui.language, "Join the ArtCraft community")).font(semibold(14.0)).color(t.text_strong),
+                    egui::RichText::new(crate::i18n::tr(&app.ui.language, "Get in touch with Unigreen")).font(semibold(14.0)).color(t.text_strong),
                 ));
                 ui.label(crate::rtl::widget(
                     ui,
@@ -740,7 +740,7 @@ fn community_card(app: &mut DesignApp, ui: &mut egui::Ui) {
                 ));
                 ui.add_space(4.0);
                 ui.horizontal(|ui| {
-                    for (text, id) in [("DesignCraft page", "help.appPage"), ("GitHub", "help.github"), ("getartcraft.com", "help.website")] {
+                    for (text, id) in [("unigreenpower.co.th", "help.website"), ("GitHub", "help.github")] {
                         let url = designcraft_engine::links::get(&id[5..]).unwrap_or_default();
                         let l = ui
                             .add(egui::Label::new(egui::RichText::new(text).size(12.0).color(t.accent).underline()).sense(Sense::click()))
@@ -754,7 +754,9 @@ fn community_card(app: &mut DesignApp, ui: &mut egui::Ui) {
                 });
             });
             ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                if crate::about::discord_button(ui, crate::i18n::tr(&app.ui.language, "Join our Discord"), vec2(190.0, 38.0)) {
+                let lang = app.ui.language.clone();
+                let tooltip = crate::about::contact_tooltip(&lang);
+                if crate::about::contact_button(ui, crate::i18n::tr(&lang, "Contact Unigreen on LINE"), &tooltip, vec2(230.0, 38.0)) {
                     let _ = app.run("help.discord", json!({}));
                 }
             });

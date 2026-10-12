@@ -1,24 +1,27 @@
-//! ArtCraft community and project links (Help menu, About, start screen, CLI, MCP).
+//! Unigreen contact and project links (Help menu, About, start screen, CLI, MCP).
 
 use serde_json::{Value, json};
 
-/// The app's slug on getartcraft.com and GitHub.
+/// The app's slug (its GitHub repository name).
 pub const APP: &str = "designcraft";
-/// The ArtCraft community Discord.
-pub const DISCORD: &str = "https://discord.gg/artcraft";
-/// The ArtCraft website.
-pub const WEBSITE: &str = "https://getartcraft.com";
-/// DesignCraft's page on the ArtCraft website.
-pub const APP_PAGE: &str = "https://getartcraft.com/apps/designcraft";
-/// DesignCraft's source repository.
-pub const GITHUB: &str = "https://github.com/storytold/designcraft";
+/// Contact Unigreen on LINE (@unigreen.power). The link key stays `discord` (`help.discord`) so
+/// existing scripts keep working.
+pub const LINE: &str = "https://line.me/R/ti/p/@unigreen.power";
+/// The LINE account, for labels and tooltips.
+pub const LINE_ID: &str = "@unigreen.power";
+/// The Unigreen website.
+pub const WEBSITE: &str = "https://unigreenpower.co.th";
+/// Unigreen Design's web page (the Unigreen website).
+pub const APP_PAGE: &str = "https://unigreenpower.co.th";
+/// Unigreen Design's source repository.
+pub const GITHUB: &str = "https://github.com/loobkaze-source/designcraft";
 /// Where to report bugs and request features.
-pub const ISSUES: &str = "https://github.com/storytold/designcraft/issues";
+pub const ISSUES: &str = "https://github.com/loobkaze-source/designcraft/issues";
 
 /// All links as JSON (the `app.links` command).
 pub fn all() -> Value {
     json!({
-        "discord": DISCORD,
+        "discord": LINE,
         "website": WEBSITE,
         "appPage": APP_PAGE,
         "github": GITHUB,
@@ -26,10 +29,10 @@ pub fn all() -> Value {
     })
 }
 
-/// A link by key (`discord`, `website`, `appPage`, `github`, `issues`).
+/// A link by key (`discord` — the LINE contact, `website`, `appPage`, `github`, `issues`).
 pub fn get(key: &str) -> Option<&'static str> {
     Some(match key {
-        "discord" => DISCORD,
+        "discord" => LINE,
         "website" => WEBSITE,
         "appPage" => APP_PAGE,
         "github" => GITHUB,
@@ -44,8 +47,8 @@ mod tests {
 
     #[test]
     fn links_follow_the_app_slug() {
-        assert!(APP_PAGE.ends_with(&format!("/apps/{APP}")));
-        assert!(GITHUB.ends_with(&format!("/storytold/{APP}")));
+        assert!(GITHUB.ends_with(&format!("/loobkaze-source/{APP}")));
+        assert!(LINE.ends_with(LINE_ID));
         assert!(ISSUES.starts_with(GITHUB));
         for k in ["discord", "website", "appPage", "github", "issues"] {
             assert!(get(k).is_some_and(|u| u.starts_with("https://")), "{k}");

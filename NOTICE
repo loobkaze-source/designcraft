@@ -15,6 +15,9 @@ list (author, source, license) is in ASSETS.md.
 - Source Sans 3 and Source Serif 4 (assets/fonts/Source*) — SIL Open Font License 1.1. See assets/fonts/OFL-SourceSans3.txt, OFL-SourceSerif4.txt.
 - Inter (assets/fonts/Inter-*.ttf) — SIL Open Font License 1.1. See assets/fonts/OFL-Inter.txt.
 - JetBrains Mono (assets/fonts/JetBrainsMono-*.ttf) — SIL Open Font License 1.1. See assets/fonts/OFL-JetBrainsMono.txt.
+- Noto Sans Thai (assets/fonts/NotoSansThai-*.ttf), Copyright 2022 The Noto Project Authors
+  (https://github.com/notofonts/thai) — SIL Open Font License 1.1. See assets/fonts/OFL-NotoSansThai.txt.
+  Used only as the Thai fallback of the interface fonts.
 - English hyphenation word list (assets/hyphenation/en-us.dic) — derived from the Moby Hyphenator II
   list by Grady Ward, public domain (Project Gutenberg eBook #3204). The hyphenation patterns
   (assets/hyphenation/en-us.pat) are trained from it by DesignCraft and released as CC0-1.0.
@@ -65,5 +68,6 @@ licensed (MIT/Apache-2.0/BSD/ISC/Zlib) and fetched through crates.io.
 No Adobe icons, images or artwork are included.
 
 Unigreen Design is a modified version of DesignCraft distributed by Unigreen Power Co., Ltd.
-Modifications: product name, app icons, colour theme and packaging metadata. The Unigreen name and
+Modifications: product name, app icons, colour theme, help and contact links, a Thai interface
+font (Noto Sans Thai) and packaging metadata. The Unigreen name and
 logo are trademarks of Unigreen Power Co., Ltd. and are not licensed under MIT or Apache-2.0.

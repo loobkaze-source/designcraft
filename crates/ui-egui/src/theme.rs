@@ -264,7 +264,7 @@ pub fn install_fonts(ctx: &egui::Context, lang: &str) {
     ctx.set_fonts(font_definitions(designcraft_fonts::CRAFT_FONTS, lang));
 }
 
-/// The UI fonts: the app's own, then the craft-fonts faces from `craft` (empty without
+/// The UI fonts: the app's own (with Noto Sans Thai as the Thai fallback), then the craft-fonts faces from `craft` (empty without
 /// `CRAFT_FONTS_DIR`) as fallbacks at the end of every family: Japanese (BIZ UDPGothic first) and
 /// Simplified Chinese, in the interface language's order, then Arabic. The `arabic` families
 /// put the Arabic face first for right-to-left runs. egui has no system-font discovery, so
@@ -277,9 +277,18 @@ fn font_definitions(craft: &'static [designcraft_fonts::CraftFont], lang: &str) 
     add(&mut fonts, "ui", include_bytes!("../../../assets/fonts/SourceSans3-Regular.ttf"));
     add(&mut fonts, "ui-semibold", include_bytes!("../../../assets/fonts/SourceSans3-Semibold.ttf"));
     add(&mut fonts, "mono", include_bytes!("../../../assets/fonts/JetBrainsMono-Regular.ttf"));
-    fonts.families.entry(FontFamily::Proportional).or_default().insert(0, "ui".into());
-    fonts.families.entry(FontFamily::Monospace).or_default().insert(0, "mono".into());
-    fonts.families.insert(FontFamily::Name("semibold".into()), vec!["ui-semibold".into(), "ui".into()]);
+    // Thai UI text (Noto Sans Thai): a fallback only, after the primary faces of every family.
+    add(&mut fonts, "ui-thai", include_bytes!("../../../assets/fonts/NotoSansThai-Regular.ttf"));
+    add(&mut fonts, "ui-thai-bold", include_bytes!("../../../assets/fonts/NotoSansThai-Bold.ttf"));
+    let proportional = fonts.families.entry(FontFamily::Proportional).or_default();
+    proportional.insert(0, "ui".into());
+    // After the primary faces, ahead of egui's emoji fallbacks.
+    let at = proportional.iter().position(|n| n.contains("Emoji") || n.contains("emoji")).unwrap_or(proportional.len());
+    proportional.insert(at, "ui-thai".into());
+    let monospace = fonts.families.entry(FontFamily::Monospace).or_default();
+    monospace.insert(0, "mono".into());
+    monospace.push("ui-thai".into());
+    fonts.families.insert(FontFamily::Name("semibold".into()), vec!["ui-semibold".into(), "ui".into(), "ui-thai-bold".into()]);
     let pick = |script: &str| -> Vec<&designcraft_fonts::CraftFont> { craft.iter().filter(|f| f.scripts.contains(&script)).collect() };
     let mut japanese = pick("Jpan");
     // BIZ UDPGothic (the UI face) first, Regular before Bold; the semibold family prefers Bold.
@@ -303,8 +312,12 @@ fn font_definitions(craft: &'static [designcraft_fonts::CraftFont], lang: &str) 
     }
     // Arabic runs (rtl.rs): the Arabic face first, so letters and spaces shape as one run.
     for family in ["arabic", "arabic-semibold"] {
-        let ui = if family == "arabic" { "ui" } else { "ui-semibold" };
-        let stack = arabic.iter().map(|f| name(f)).chain([ui.to_string(), "ui".to_string()]).chain(japanese.iter().chain(&chinese).map(|f| name(f)));
+        let (ui, thai) = if family == "arabic" { ("ui", "ui-thai") } else { ("ui-semibold", "ui-thai-bold") };
+        let stack = arabic
+            .iter()
+            .map(|f| name(f))
+            .chain([ui.to_string(), "ui".to_string(), thai.to_string()])
+            .chain(japanese.iter().chain(&chinese).map(|f| name(f)));
         let mut seen = std::collections::HashSet::new();
         fonts.families.insert(FontFamily::Name(family.into()), stack.filter(|n| seen.insert(n.clone())).collect());
     }
@@ -432,6 +445,41 @@ mod japanese_font_tests {
         });
         // And the real installer works with whatever this build has.
         super::install_fonts(&egui::Context::default(), "ja");
+    }
+}
+
+#[cfg(test)]
+mod thai_font_tests {
+    #[test]
+    fn noto_sans_thai_is_a_fallback_in_every_ui_family() {
+        let defs = super::font_definitions(&[], "");
+        let named = |n: &str| egui::FontFamily::Name(n.into());
+        for (family, primary, thai) in [
+            (egui::FontFamily::Proportional, "ui", "ui-thai"),
+            (egui::FontFamily::Monospace, "mono", "ui-thai"),
+            (named("semibold"), "ui-semibold", "ui-thai-bold"),
+            (named("arabic"), "ui", "ui-thai"),
+            (named("arabic-semibold"), "ui-semibold", "ui-thai-bold"),
+        ] {
+            let stack = &defs.families[&family];
+            let at = |n: &str| stack.iter().position(|x| x == n);
+            assert!(at(thai).is_some(), "{family:?} lacks {thai}: {stack:?}");
+            assert!(at(primary).is_some_and(|p| Some(p) < at(thai)), "{family:?}: {thai} must come after {primary}: {stack:?}");
+            assert_ne!(stack.first().map(String::as_str), Some(thai), "{family:?}");
+        }
+        let ctx = egui::Context::default();
+        ctx.set_fonts(defs);
+        let mut output = ctx.run_ui(egui::RawInput::default(), |_| {});
+        output.textures_delta.clear();
+        ctx.fonts_mut(|fonts| {
+            let families = [egui::FontFamily::Proportional, egui::FontFamily::Monospace, named("semibold"), named("arabic"), named("arabic-semibold")];
+            for family in families {
+                let font = egui::FontId::new(13.0, family);
+                for ch in "ภาษาไทยกขค".chars() {
+                    assert!(fonts.has_glyph(&font, ch), "missing {ch} in {font:?}");
+                }
+            }
+        });
     }
 }
 

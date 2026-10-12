@@ -2,7 +2,7 @@
 
 Every non-code asset in this repository (fonts, images, example art, presets) is listed here with its author, source and licence. `cargo xtask assets` (part of `cargo xtask ci`) fails if an asset file is missing from this table.
 
-**Policy (mandatory):** DesignCraft contains **no Adobe iconography, images, artwork, presets, swatch libraries or ICC profiles**. Every asset is original work by DesignCraft contributors or third-party material under an open licence (OSI open source, public domain / CC0, or Creative Commons that allows redistribution). Screenshots of Adobe software are never committed. Font files are not added here: shared fonts live in [storytold/craft-fonts](https://github.com/storytold/craft-fonts), an optional build input (`CRAFT_FONTS_DIR`, see AGENTS.md and craftrules [`standards/fonts.md`](https://github.com/storytold/craftrules/blob/main/standards/fonts.md)). The one exception is the ArtCraft brand files in `docs/brand/`: ArtCraft trademarks, not open source, used under `docs/brand/LICENSE-brand.txt`.
+**Policy (mandatory):** DesignCraft contains **no Adobe iconography, images, artwork, presets, swatch libraries or ICC profiles**. Every asset is original work by DesignCraft contributors or third-party material under an open licence (OSI open source, public domain / CC0, or Creative Commons that allows redistribution). Screenshots of Adobe software are never committed. Font files are not added here (Unigreen Design's one addition: Noto Sans Thai, the Thai fallback of the interface fonts, listed below): shared fonts live in [storytold/craft-fonts](https://github.com/storytold/craft-fonts), an optional build input (`CRAFT_FONTS_DIR`, see AGENTS.md and craftrules [`standards/fonts.md`](https://github.com/storytold/craftrules/blob/main/standards/fonts.md)). The one exception is the ArtCraft brand files in `docs/brand/`: ArtCraft trademarks, not open source, used under `docs/brand/LICENSE-brand.txt`.
 
 Generated-in-code art is original and has no file to list: the UI icon set (`crates/ui-egui/src/icons.rs`), default swatches, and the sample magazine's imagery (`crates/engine/src/sample.rs`).
 
@@ -19,8 +19,11 @@ Generated-in-code art is original and has no file to list: the UI icon set (`cra
 | `assets/fonts/Inter-Regular.ttf` | Rasmus Andersson / The Inter Project Authors | https://github.com/rsms/inter | OFL-1.1 (`assets/fonts/OFL-Inter.txt`) | Open-source typeface |
 | `assets/fonts/Inter-SemiBold.ttf` | Rasmus Andersson / The Inter Project Authors | https://github.com/rsms/inter | OFL-1.1 (`assets/fonts/OFL-Inter.txt`) | Open-source typeface |
 | `assets/fonts/JetBrainsMono-Regular.ttf` | The JetBrains Mono Project Authors | https://github.com/JetBrains/JetBrainsMono | OFL-1.1 (`assets/fonts/OFL-JetBrainsMono.txt`) | Open-source typeface |
+| `assets/fonts/NotoSansThai-Bold.ttf` | The Noto Project Authors | https://github.com/notofonts/thai (v2.0, as packaged in Ubuntu fonts-noto-core) | OFL-1.1 (`assets/fonts/OFL-NotoSansThai.txt`) | Open-source typeface; Thai fallback of the bold UI font (interface only, not document fonts) |
+| `assets/fonts/NotoSansThai-Regular.ttf` | The Noto Project Authors | https://github.com/notofonts/thai (v2.0, as packaged in Ubuntu fonts-noto-core) | OFL-1.1 (`assets/fonts/OFL-NotoSansThai.txt`) | Open-source typeface; Thai fallback of the UI fonts (interface only, not document fonts) |
 | `assets/fonts/OFL-Inter.txt` | (licence text) | upstream project | — |  |
 | `assets/fonts/OFL-JetBrainsMono.txt` | (licence text) | upstream project | — |  |
+| `assets/fonts/OFL-NotoSansThai.txt` | (licence text) | upstream project | — |  |
 | `assets/fonts/OFL-SourceSans3.txt` | (licence text) | upstream project | — |  |
 | `assets/fonts/OFL-SourceSerif4.txt` | (licence text) | upstream project | — |  |
 | `assets/fonts/SourceSans3-Bold.ttf` | Paul D. Hunt / Adobe (released as open source) | https://github.com/adobe-fonts/source-sans | OFL-1.1 (`assets/fonts/OFL-SourceSans3.txt`) | Open-source typeface |

@@ -40,8 +40,8 @@
     </screenshot>
   </screenshots>
   <branding>
-    <color type="primary" scheme_preference="light">#9fd0ff</color>
-    <color type="primary" scheme_preference="dark">#1f64ba</color>
+    <color type="primary" scheme_preference="light">#34d399</color>
+    <color type="primary" scheme_preference="dark">#0d1a12</color>
   </branding>
   <requires>
     <display_length compare="ge">760</display_length>
